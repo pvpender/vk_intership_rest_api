@@ -6,17 +6,14 @@ namespace App\Service;
 
 use App\Dto\QuestRequestDto;
 use App\Dto\QuestResponseDto;
-use App\Dto\UserRequestDto;
 use App\Entity\Quest;
-use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 class QuestService
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager
-    )
-    {
+    ) {
     }
 
     public function createQuest(QuestRequestDto $questRequestDto): void
@@ -32,14 +29,14 @@ class QuestService
     public function getQuest(int $id): ?QuestResponseDto
     {
         $quest = $this->entityManager->getRepository(Quest::class)->find($id);
-        if (!$quest)
+        if (!$quest) {
             return null;
+        }
+
         return new QuestResponseDto(
             $quest->getId(),
             $quest->getName(),
             $quest->getCost()
         );
     }
-
 }
-

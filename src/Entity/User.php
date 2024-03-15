@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -39,6 +39,7 @@ class User
     public function setName(string $name): User
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -50,6 +51,7 @@ class User
     public function setBalance(int $balance): ?User
     {
         $this->balance = $balance;
+
         return $this;
     }
 }

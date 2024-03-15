@@ -8,14 +8,12 @@ use App\Dto\UserRequestDto;
 use App\Dto\UserResponseDto;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use function Symfony\Component\String\u;
 
 class UserService
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
-    )
-    {
+        private readonly EntityManagerInterface $entityManager
+    ) {
     }
 
     public function createUser(UserRequestDto $userRequestDto): void
@@ -31,13 +29,14 @@ class UserService
     public function getUser(int $id): ?UserResponseDto
     {
         $user = $this->entityManager->getRepository(User::class)->find($id);
-        if (!$user)
+        if (!$user) {
             return null;
+        }
+
         return new UserResponseDto(
             $user->getId(),
             $user->getName(),
             $user->getBalance()
         );
     }
-
 }

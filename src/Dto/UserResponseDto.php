@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use Symfony\Component\Validator\Constraints as Assert;
 use OpenApi\Attributes as OA;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[OA\Schema(title: 'UserResponseModel')]
 class UserResponseDto
@@ -17,8 +17,6 @@ class UserResponseDto
         public string $name,
         #[Assert\GreaterThanOrEqual(0)]
         public int $balance
-    )
-    {
-
+    ) {
     }
 }

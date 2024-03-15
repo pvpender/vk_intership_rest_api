@@ -38,6 +38,7 @@ class Quest
     public function setName(string $name): Quest
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -49,7 +50,7 @@ class Quest
     public function setCost(int $cost): Quest
     {
         $this->cost = $cost;
+
         return $this;
     }
-
 }
