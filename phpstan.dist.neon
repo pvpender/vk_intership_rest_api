@@ -4,3 +4,5 @@ parameters:
         - public/
         - src/
     checkGenericClassInNonGenericObjectType: false
+    ignoreErrors:
+        - '#Parameter \#\d+ \$examples of class OpenApi\\Attributes\\JsonContent constructor expects array\<string\, OpenApi\\Attributes\\Examples\>\|null\, array\<int\, OpenApi\\Attributes\\Examples\> given\.#'

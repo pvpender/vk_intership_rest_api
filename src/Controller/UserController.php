@@ -26,7 +26,7 @@ class UserController
         description: 'Successful operation',
         content: new OA\JsonContent(
             [
-                new OA\Examples(example: 'integer', summary: 'Creation', value: ['message' => 'success', 'id' => 1])
+                new OA\Examples(example: 'integer', summary: 'Creation', value: ['message' => 'success', 'id' => 1]),
             ]
         )
     )]
@@ -48,7 +48,8 @@ class UserController
     #[OA\Response(
         response: 200,
         description: 'User object',
-        content: new OA\JsonContent([
+        content: new OA\JsonContent(
+            [
             new OA\Examples(
                 example: 'result',
                 summary: 'Success',
@@ -65,7 +66,7 @@ class UserController
                     example: 'result',
                     summary: 'error',
                     value: ['message' => 'User with id=0 not found']
-                )
+                ),
             ]
         )
     )]
@@ -76,14 +77,15 @@ class UserController
         UserService $service,
     ): Response {
         $user = $service->getUser($id);
-        if (!$user){
+        if (!$user) {
             return new JsonResponse(
                 [
-                    'message' => "User with id={$id} not found"
+                    'message' => "User with id={$id} not found",
                 ],
                 404
             );
         }
+
         return new JsonResponse(
             [
                 'message' => 'success',
@@ -123,7 +125,7 @@ class UserController
                     example: 'result',
                     summary: 'Success',
                     value: ['message' => 'success']
-                )
+                ),
             ]
         )
     )]
@@ -136,7 +138,7 @@ class UserController
                     example: 'result',
                     summary: 'error',
                     value: ['message' => 'User with id=0 not found']
-                )
+                ),
             ]
         )
     )]
