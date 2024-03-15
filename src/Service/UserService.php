@@ -39,4 +39,29 @@ class UserService
             $user->getBalance()
         );
     }
+
+    public function updateUser(int $id, UserRequestDto $userRequestDto): void
+    {
+        $user = $this->entityManager->getRepository(User::class)->find($id);
+        if (!$user) {
+            return;
+        }
+
+        $user
+            ->setName($userRequestDto->name)
+            ->setBalance($userRequestDto->balance);
+        $this->entityManager->flush();
+    }
+
+    public function deleteUser(int $id): ?int
+    {
+        $user = $this->entityManager->getRepository(User::class)->find($id);
+        if (!$user) {
+            return null;
+        }
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();
+
+        return $user->getId();
+    }
 }
