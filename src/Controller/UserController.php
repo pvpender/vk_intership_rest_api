@@ -26,7 +26,7 @@ class UserController
         description: 'Successful operation',
         content: new OA\JsonContent(
             [
-                new OA\Examples(example: 'integer', summary: 'Creation', value: ['message' => 'success', 'id' => 1]),
+                new OA\Examples(example: 'integer', summary: 'Creation', value: ['message' => 'Success', 'id' => 1]),
             ]
         )
     )]
@@ -37,9 +37,9 @@ class UserController
         UserRequestDto $userRequestDto,
         UserService $service
     ): Response {
-        $service->createUser($userRequestDto);
+        $id = $service->createUser($userRequestDto);
 
-        return new JsonResponse(['message' => 'Success'], 200);
+        return new JsonResponse(['message' => 'Success', 'id' => $id], 200);
     }
 
     /**
@@ -53,7 +53,7 @@ class UserController
             new OA\Examples(
                 example: 'result',
                 summary: 'Success',
-                value: ['message' => 'yep', 'user' => new UserResponseDto(1, 'test', 0)]
+                value: ['message' => 'Success', 'user' => new UserResponseDto(1, 'test', 0)]
             )]
         )
     )]
@@ -88,7 +88,7 @@ class UserController
 
         return new JsonResponse(
             [
-                'message' => 'success',
+                'message' => 'Success',
                 'user' => $service->getUser($id),
             ],
             200
@@ -110,7 +110,7 @@ class UserController
     ): Response {
         $service->updateUser($id, $userRequestDto);
 
-        return new JsonResponse(['message' => 'success'], 200);
+        return new JsonResponse(['message' => 'Success'], 200);
     }
 
     /**
@@ -152,6 +152,6 @@ class UserController
             return new JsonResponse(['message' => "User with id={$id} not found"], 404);
         }
 
-        return new JsonResponse(['message' => 'success'], 200);
+        return new JsonResponse(['message' => 'Success'], 200);
     }
 }

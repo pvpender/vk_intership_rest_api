@@ -16,7 +16,7 @@ class UserService
     ) {
     }
 
-    public function createUser(UserRequestDto $userRequestDto): void
+    public function createUser(UserRequestDto $userRequestDto): int
     {
         $user = new User();
         $user
@@ -24,6 +24,7 @@ class UserService
             ->setBalance($userRequestDto->balance);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+        return $user->getId();
     }
 
     public function getUser(int $id): ?UserResponseDto
@@ -62,6 +63,6 @@ class UserService
         $this->entityManager->remove($user);
         $this->entityManager->flush();
 
-        return $user->getId();
+        return 1;
     }
 }

@@ -16,7 +16,7 @@ class QuestService
     ) {
     }
 
-    public function createQuest(QuestRequestDto $questRequestDto): void
+    public function createQuest(QuestRequestDto $questRequestDto): int
     {
         $quest = new Quest();
         $quest
@@ -24,6 +24,7 @@ class QuestService
             ->setCost($questRequestDto->cost);
         $this->entityManager->persist($quest);
         $this->entityManager->flush();
+        return $quest->getId();
     }
 
     public function getQuest(int $id): ?QuestResponseDto
@@ -39,4 +40,28 @@ class QuestService
             $quest->getCost()
         );
     }
+
+    public function updateQuest(int $id, QuestRequestDto $questRequestDto): void
+    {
+        $quest = $this->entityManager->getRepository(Quest::class)->find($id);
+        if (!$quest) {
+            return;
+        }
+        $quest
+            ->setName($questRequestDto->name)
+            ->setCost($questRequestDto->cost);
+        $this->entityManager->flush();
+    }
+
+    public function deleteQuest(int $id): ?int
+    {
+        $quest = $this->entityManager->getRepository(Quest::class)->find($id);
+        if (!$quest) {
+            return null;
+        }
+        $this->entityManager->remove($quest);
+        $this->entityManager->flush();
+        return 1;
+    }
+
 }
