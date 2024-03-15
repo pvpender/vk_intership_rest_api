@@ -6,7 +6,9 @@ namespace App\Dto;
 
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(title: 'UserRequestModel')]
 class UserRequestDto
 {
     public function __construct(

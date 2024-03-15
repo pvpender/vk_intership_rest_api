@@ -16,15 +16,15 @@ class Quest
     #[ORM\Id]
     #[ORM\GeneratedValue('IDENTITY')]
     #[ORM\Column(type: Types::INTEGER)]
-    private ?int $id;
+    private ?int $id = null;
 
     #[ORM\Column(length: 120)]
     #[Assert\Length(min: 1, max: 120)]
-    private ?string $name;
+    private ?string $name = null;
 
     #[ORM\Column(type: Types::INTEGER)]
     #[Assert\GreaterThanOrEqual(0)]
-    private ?int $cost;
+    private ?int $cost = null;
 
     public function getId(): ?int
     {

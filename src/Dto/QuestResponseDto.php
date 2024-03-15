@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Dto;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(title: 'QuestResponseModel')]
 class QuestResponseDto
 {
     public function __construct(

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Dto;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(title: 'QuestRequestModel')]
 class QuestRequestDto
 {
     public function __construct(
