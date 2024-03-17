@@ -104,4 +104,23 @@ class QuestService
 
         return 1;
     }
+
+    /**
+     * @return QuestResponseDto[]
+     */
+    public function getAllQuests(): array
+    {
+        $quests = $this->entityManager->getRepository(Quest::class)->findAll();
+        $questsDto = [];
+        foreach ($quests as $quest) {
+            $questsDto[] = new QuestResponseDto(
+                $quest->getId(),
+                $quest->getName(),
+                $quest->getCost(),
+                $quest->getRepeatable()
+            );
+        }
+
+        return $questsDto;
+    }
 }

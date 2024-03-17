@@ -55,7 +55,10 @@ class QuestController
                 new OA\Examples(
                     example: 'result',
                     summary: 'Success',
-                    value: ['message' => 'Success', 'quest' => new QuestResponseDto(1, 'test', 10, false)]
+                    value: [
+                        'message' => 'Success',
+                        'quest' => new QuestResponseDto(1, 'test', 10, false),
+                    ]
                 )]
         )
     )]
@@ -73,14 +76,14 @@ class QuestController
         )
     )]
     #[OA\PathParameter(name: 'id', description: 'Quest id', schema: new OA\Schema(type: 'integer'))]
-    #[Route('/quest/{id}', methods: ['Get'])]
+    #[Route('/quest/{id}', requirements: ['id' => '\d+'], methods: ['Get'])]
     public function getQuest(
         int $id,
         QuestService $service,
         SerializerInterface $serializer
     ): Response {
         $quest = $service->getQuest($id);
-        if (is_null($quest)) {
+        if (!$quest) {
             return new JsonResponse(['message' => "Quest with id={$id} not found"], 404);
         }
 
@@ -92,7 +95,7 @@ class QuestController
      */
     #[OA\Response(response: 'default', description: 'Successful operation')]
     #[OA\PathParameter(name: 'id', description: 'Quest id', schema: new OA\Schema(type: 'integer'))]
-    #[Route('/quest/{id}', methods: ['PUT'])]
+    #[Route('/quest/{id}', requirements: ['id' => '\d+'], methods: ['PUT'])]
     public function updateUser(
         int $id,
         #[OA\RequestBody(description: 'User data')]
@@ -135,7 +138,7 @@ class QuestController
         )
     )]
     #[OA\PathParameter(name: 'id', description: 'Quest id', schema: new OA\Schema(type: 'integer'))]
-    #[Route('/quest/{id}', methods: ['Delete'])]
+    #[Route('/quest/{id}', requirements: ['id' => '\d+'], methods: ['Delete'])]
     public function deleteUser(
         int $id,
         QuestService $service
@@ -145,6 +148,33 @@ class QuestController
         }
 
         return new JsonResponse(['message' => 'Success'], 200);
+    }
+
+    /**
+     * Get all quest
+     */
+    #[OA\Response(
+        response: 200,
+        description: 'Quest objects',
+        content: new OA\JsonContent(
+            [
+                new OA\Examples(
+                    example: 'result',
+                    summary: 'Success',
+                    value: ['
+                        message' => 'Success',
+                        'quest' => [new QuestResponseDto(1, 'test', 10, false)],
+                    ]
+                )]
+        )
+    )]
+    #[Route('/quest/all', methods: ['Get'])]
+    public function getAllQuests(
+        QuestService $service
+    ): Response {
+        $quests = $service->getAllQuests();
+
+        return new JsonResponse(['message' => 'Success', 'quests' => $quests], 200);
     }
 
     /**

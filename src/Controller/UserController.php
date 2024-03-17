@@ -72,7 +72,7 @@ class UserController
         )
     )]
     #[OA\PathParameter(name: 'id', description: 'User id', schema: new OA\Schema(type: 'integer'))]
-    #[Route('/user/{id}', methods: ['Get'])]
+    #[Route('/user/{id}', requirements: ['id' => '\d+'], methods: ['Get'])]
     public function getUser(
         int $id,
         UserService $service,
@@ -97,11 +97,35 @@ class UserController
     }
 
     /**
+     * Get all users
+     */
+    #[OA\Response(
+        response: 200,
+        description: 'User objects',
+        content: new OA\JsonContent(
+            [
+                new OA\Examples(
+                    example: 'result',
+                    summary: 'Success',
+                    value: ['message' => 'Success', 'users' => [new UserResponseDto(1, 'test', 0)]]
+                )]
+        )
+    )]
+    #[Route('/user/all', methods: ['Get'])]
+    public function getAllUsers(
+        UserService $service
+    ): Response {
+        $users = $service->getAllUsers();
+
+        return new JsonResponse(['message' => 'Success', 'users' => $users], 200);
+    }
+
+    /**
      * Update user
      */
     #[OA\Response(response: 'default', description: 'Successful operation')]
     #[OA\PathParameter(name: 'id', description: 'User id', schema: new OA\Schema(type: 'integer'))]
-    #[Route('/user/{id}', methods: ['PUT'])]
+    #[Route('/user/{id}', requirements: ['id' => '\d+'], methods: ['PUT'])]
     public function updateUser(
         int $id,
         #[OA\RequestBody(description: 'User data')]
@@ -144,7 +168,7 @@ class UserController
         )
     )]
     #[OA\PathParameter(name: 'id', description: 'User id', schema: new OA\Schema(type: 'integer'))]
-    #[Route('/user/{id}', methods: ['Delete'])]
+    #[Route('/user/{id}', requirements: ['id' => '\d+'], methods: ['Delete'])]
     public function deleteUser(
         int $id,
         UserService $service
@@ -192,7 +216,7 @@ class UserController
         UserService $service
     ): Response {
         $history = $service->getUserHistory($id);
-        if (is_null($history)) {
+        if (!$history) {
             return new JsonResponse(['message' => "User with id={$id} not found"], 404);
         }
 

@@ -68,7 +68,6 @@ class UserService
         return 1;
     }
 
-
     public function getUserHistory(int $id): ?HistoryResponseDto
     {
         $user = $this->entityManager->getRepository(User::class)->find($id);
@@ -77,5 +76,19 @@ class UserService
         }
 
         return HistoryResponseDto::from($user);
+    }
+
+    /**
+     * @return UserResponseDto[]
+     */
+    public function getAllUsers(): array
+    {
+        $users = $this->entityManager->getRepository(User::class)->findAll();
+        $usersDto = [];
+        foreach ($users as $user) {
+            $usersDto[] = new UserResponseDto($user->getId(), $user->getName(), $user->getBalance());
+        }
+
+        return $usersDto;
     }
 }
