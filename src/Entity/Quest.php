@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: QuestRepository::class)]
-#[ORM\Table('quests')]
+#[ORM\Table('quest')]
 class Quest
 {
     #[ORM\Id]
@@ -26,6 +26,9 @@ class Quest
     #[Assert\GreaterThanOrEqual(0)]
     private ?int $cost = null;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private ?bool $repeatable = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -35,7 +38,7 @@ class Quest
     {
         return $this->name;
     }
-    public function setName(string $name): Quest
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -47,9 +50,21 @@ class Quest
         return $this->cost;
     }
 
-    public function setCost(int $cost): Quest
+    public function setCost(int $cost): self
     {
         $this->cost = $cost;
+
+        return $this;
+    }
+
+    public function getRepeatable(): bool
+    {
+        return $this->repeatable;
+    }
+
+    public function setRepeatable(bool $repeatable): self
+    {
+        $this->repeatable = $repeatable;
 
         return $this;
     }

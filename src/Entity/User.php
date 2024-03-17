@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -26,6 +27,9 @@ class User
     #[Assert\GreaterThanOrEqual(0)]
     private ?int $balance = null;
 
+    #[ORM\OneToMany(targetEntity: AchievementHistory::class, mappedBy: 'user', cascade: ['persist'])]
+    private ?Collection $history = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -36,7 +40,7 @@ class User
         return $this->name;
     }
 
-    public function setName(string $name): User
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -48,9 +52,21 @@ class User
         return $this->balance;
     }
 
-    public function setBalance(int $balance): ?User
+    public function setBalance(int $balance): self
     {
         $this->balance = $balance;
+
+        return $this;
+    }
+
+    public function getHistory(): Collection
+    {
+        return $this->history;
+    }
+
+    public function addHistory(AchievementHistory $history): self
+    {
+        $this->history[] = $history;
 
         return $this;
     }

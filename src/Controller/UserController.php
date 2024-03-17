@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Dto\UserRequestDto;
 use App\Dto\UserResponseDto;
+use App\Entity\User;
 use App\Service\UserService;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -124,7 +125,7 @@ class UserController
                 new OA\Examples(
                     example: 'result',
                     summary: 'Success',
-                    value: ['message' => 'success']
+                    value: ['message' => 'Success']
                 ),
             ]
         )
@@ -153,5 +154,48 @@ class UserController
         }
 
         return new JsonResponse(['message' => 'Success'], 200);
+    }
+
+    /**
+     * Get user balance and history
+     */
+    #[OA\Response(
+        response: 200,
+        description: 'Successful operation',
+        content: new OA\JsonContent(
+            [
+                new OA\Examples(
+                    example: 'result',
+                    summary: 'Success',
+                    value: ['message' => 'Success', 'histories' => []]
+                ),
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'User not found',
+        content: new OA\JsonContent(
+            [
+                new OA\Examples(
+                    example: 'result',
+                    summary: 'error',
+                    value: ['message' => 'User with id=0 not found']
+                ),
+            ]
+        )
+    )]
+    #[OA\PathParameter(name: 'id', description: 'User id', schema: new OA\Schema(type: 'integer'))]
+    #[Route('/user/{id}/history', methods: ['Get'])]
+    public function getUserHistory(
+        int $id,
+        UserService $service
+    ): Response {
+        $history = $service->getUserHistory($id);
+        if (is_null($history)) {
+            return new JsonResponse(['message' => "User with id={$id} not found"], 404);
+        }
+
+        return new JsonResponse(['message' => 'Success', 'history' => $history], 200);
     }
 }

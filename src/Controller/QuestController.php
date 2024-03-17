@@ -7,11 +7,11 @@ namespace App\Controller;
 use App\Dto\QuestRequestDto;
 use App\Dto\QuestResponseDto;
 use App\Service\QuestService;
-use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -55,7 +55,7 @@ class QuestController
                 new OA\Examples(
                     example: 'result',
                     summary: 'Success',
-                    value: ['message' => 'Success', 'quest' => new QuestResponseDto(1, 'test', 10)]
+                    value: ['message' => 'Success', 'quest' => new QuestResponseDto(1, 'test', 10, false)]
                 )]
         )
     )]
@@ -80,9 +80,10 @@ class QuestController
         SerializerInterface $serializer
     ): Response {
         $quest = $service->getQuest($id);
-        if (is_null($quest)){
+        if (is_null($quest)) {
             return new JsonResponse(['message' => "Quest with id={$id} not found"], 404);
         }
+
         return new JsonResponse(['message' => 'Success', 'quest' => $quest]);
     }
 
@@ -141,6 +142,65 @@ class QuestController
     ): Response {
         if (is_null($service->deleteQuest($id))) {
             return new JsonResponse(['message' => "Quest with id={$id} not found"], 404);
+        }
+
+        return new JsonResponse(['message' => 'Success'], 200);
+    }
+
+    /**
+     * Signals that quest is completed
+     */
+    #[OA\Response(
+        response: 200,
+        description: 'Successful operation',
+        content: new OA\JsonContent(
+            [
+                new OA\Examples(
+                    example: 'result',
+                    summary: 'success',
+                    value: ['message' => 'Success']
+                ),
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'Successful operation',
+        content: new OA\JsonContent(
+            [
+                new OA\Examples(
+                    example: 'result',
+                    summary: 'error',
+                    value: ['Quest with id=1 is already complete by user with id=1']
+                ),
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'User or quest not found',
+        content: new OA\JsonContent(
+            [
+                new OA\Examples(
+                    example: 'result',
+                    summary: 'error',
+                    value: ['message' => 'Invalid user or quest id']
+                ),
+            ]
+        )
+    )]
+    #[OA\QueryParameter(name: 'userId', description: 'Id of user who complete the quest')]
+    #[OA\QueryParameter(name: 'questId', description: 'Id of completed quest')]
+    #[Route('/quest/complete', methods: ['POST'])]
+    public function addCompletedQuest(
+        #[MapQueryParameter]
+        int $userId,
+        #[MapQueryParameter]
+        int $questId,
+        QuestService $service,
+    ): Response {
+        if (is_null($service->addCompletedQuest($userId, $questId))) {
+            return new JsonResponse(['message' => 'Invalid user or quest id'], 404);
         }
 
         return new JsonResponse(['message' => 'Success'], 200);

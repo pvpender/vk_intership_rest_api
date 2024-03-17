@@ -16,7 +16,8 @@ class QuestResponseDto
         #[Assert\Length(min: 1, max: 120)]
         public string $name,
         #[Assert\GreaterThanOrEqual(0)]
-        public int $cost
+        public int $cost,
+        public bool $repeatable
     ) {
     }
 }

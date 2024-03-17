@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Dto\HistoryResponseDto;
 use App\Dto\UserRequestDto;
 use App\Dto\UserResponseDto;
 use App\Entity\User;
@@ -24,6 +25,7 @@ class UserService
             ->setBalance($userRequestDto->balance);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+
         return $user->getId();
     }
 
@@ -64,5 +66,16 @@ class UserService
         $this->entityManager->flush();
 
         return 1;
+    }
+
+
+    public function getUserHistory(int $id): ?HistoryResponseDto
+    {
+        $user = $this->entityManager->getRepository(User::class)->find($id);
+        if (!$user) {
+            return null;
+        }
+
+        return HistoryResponseDto::from($user);
     }
 }
