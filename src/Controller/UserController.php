@@ -191,7 +191,7 @@ class UserController
                 new OA\Examples(
                     example: 'result',
                     summary: 'Success',
-                    value: ['message' => 'Success', 'histories' => []]
+                    value: ['message' => 'Success', "balance" => 10, 'histories' => []]
                 ),
             ]
         )
