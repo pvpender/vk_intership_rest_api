@@ -92,7 +92,7 @@ class QuestService
                 if ($history->getQuestId() === $value->getQuestId()) {
                     throw new HttpException(
                         400,
-                        "Quest with id={$questId} is already complete by user with id={$userId}"
+                        "Quest with id={$questId} has already been completed by user with id={$userId}"
                     );
                 }
             }
